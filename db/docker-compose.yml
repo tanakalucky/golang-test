@@ -26,6 +26,8 @@ services:
       MYSQL_PASSWORD: ${USERPASS}
       TZ: 'Asia/Tokyo'
     container_name: db
+    ports:
+      - 3306:3306
 
   adminer:
     container_name: adminer-for-go

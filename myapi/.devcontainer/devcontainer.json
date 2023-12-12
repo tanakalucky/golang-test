@@ -1,0 +1,31 @@
+{
+    "service": "golang-test",
+    "dockerComposeFile": "../docker-compose.yml",
+    "workspaceFolder": "/workdir",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.go"
+            ]
+        },
+        "settings": {
+            "editor.formatOnSave": true,
+            "go.formatTool": "goimports",
+            "[go]": {
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": true
+                },
+                "go.toolsManagement.autoUpdate": true,
+                "go.vetOnSave": "package"
+            },
+            "[go.mod]": {
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": true
+                }
+            }
+        }
+        
+    }
+}
