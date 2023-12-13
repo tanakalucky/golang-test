@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"dbsample/models"
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -20,9 +21,35 @@ func main() {
 
 	defer db.Close()
 
-	if err := db.Ping(); err != nil {
+	articleID := 1
+	const sqlStr = `
+		select
+			*
+		from
+			articles
+		where
+			article_id = ?;
+	`
+
+	row := db.QueryRow(sqlStr, articleID)
+	if err := row.Err(); err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println("connect to DB")
+		return
+	} 
+	
+	var article models.Article
+	var createdTime sql.NullTime
+
+	err = row.Scan(&article.ID, &article.Title, &article.Contents, &article.UserName, &article.NiceNum, &createdTime)
+
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
+
+	if createdTime.Valid {
+		article.CreatedAt = createdTime.Time
+	}
+
+	fmt.Printf("%+v\n", article)
 }
