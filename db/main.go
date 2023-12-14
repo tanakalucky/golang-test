@@ -35,8 +35,8 @@ func main() {
 	if err := row.Err(); err != nil {
 		fmt.Println(err)
 		return
-	} 
-	
+	}
+
 	var article models.Article
 	var createdTime sql.NullTime
 
