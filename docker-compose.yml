@@ -2,14 +2,14 @@ version: '3.9'
 
 services:
   golang-test:
-    ports:
-      - 8080:8080
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - .:/workdir
     tty: true
+    ports:
+      - 8080:8080
 
   db:
     image: mysql:latest
