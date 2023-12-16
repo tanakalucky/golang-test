@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"dbsample/models"
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -21,35 +20,52 @@ func main() {
 
 	defer db.Close()
 
-	articleID := 1
-	const sqlStr = `
+	tx, err := db.Begin()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	article_id := 1
+	const sqlGetNice = `
 		select
-			*
+			nice
 		from
 			articles
 		where
 			article_id = ?;
 	`
 
-	row := db.QueryRow(sqlStr, articleID)
-	if err := row.Err(); err != nil {
+	row := tx.QueryRow(sqlGetNice, article_id)
+	if err = row.Err(); err != nil {
 		fmt.Println(err)
+		tx.Rollback()
 		return
 	}
 
-	var article models.Article
-	var createdTime sql.NullTime
-
-	err = row.Scan(&article.ID, &article.Title, &article.Contents, &article.UserName, &article.NiceNum, &createdTime)
-
+	var nicenum int
+	err = row.Scan(&nicenum)
 	if err != nil {
 		fmt.Println(err)
+		tx.Rollback()
 		return
 	}
 
-	if createdTime.Valid {
-		article.CreatedAt = createdTime.Time
+	const sqlUpdateNice = `
+		update
+			articles
+		set
+			nice = ?
+		where
+			article_id = ?;
+	`
+
+	_, err = tx.Exec(sqlUpdateNice, nicenum+1, article_id)
+	if err != nil {
+		fmt.Println(err)
+		tx.Rollback()
+		return
 	}
 
-	fmt.Printf("%+v\n", article)
+	tx.Commit()
 }
