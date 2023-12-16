@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/tanakalucky/golang-test/models"
 )
 
@@ -75,7 +76,8 @@ func SelectArticleDetail(db *sql.DB, articleID int) (models.Article, error) {
 			title,
 			contents,
 			username,
-			nice
+			nice,
+			created_at
 		from
 			articles
 		where

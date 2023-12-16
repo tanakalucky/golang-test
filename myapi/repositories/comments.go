@@ -25,6 +25,7 @@ func InsertComment(db *sql.DB, comment models.Comment) (models.Comment, error) {
 	}
 
 	var newComment models.Comment
+	newComment.CommentID = int(articleID)
 	newComment.ArticleID = int(articleID)
 	newComment.Message = comment.Message
 
@@ -38,7 +39,7 @@ func SelectCommentList(db *sql.DB, articleID int) ([]models.Comment, error) {
 		from
 			comments
 		where
-			article_id
+			article_id = ?
 	`
 
 	rows, err := db.Query(sqlStr, articleID)
