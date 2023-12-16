@@ -30,3 +30,40 @@ func InsertComment(db *sql.DB, comment models.Comment) (models.Comment, error) {
 
 	return newComment, nil
 }
+
+func SelectCommentList(db *sql.DB, articleID int) ([]models.Comment, error) {
+	const sqlStr = `
+		select
+			*
+		from
+			comments
+		where
+			article_id
+	`
+
+	rows, err := db.Query(sqlStr, articleID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var commentList = make([]models.Comment, 0)
+
+	for rows.Next() {
+		var comment models.Comment
+		var createdTime sql.NullTime
+
+		err := rows.Scan(&comment.ArticleID, &comment.ArticleID, &comment.Message, &createdTime)
+		if err != nil {
+			return nil, err
+		}
+
+		if createdTime.Valid {
+			comment.CreatedAt = createdTime.Time
+		}
+
+		commentList = append(commentList, comment)
+	}
+
+	return commentList, nil
+}
