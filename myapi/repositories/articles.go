@@ -101,3 +101,41 @@ func SelectArticleDetail(db *sql.DB, articleID int) (models.Article, error) {
 
 	return article, nil
 }
+
+func UpdateNiceNum(db *sql.DB, articleID int) error {
+	const sqlGetNice = `
+		select
+			nice
+		from
+			articles
+		where
+			article_id = ?;
+	`
+
+	row := db.QueryRow(sqlGetNice, articleID)
+	if err := row.Err(); err != nil {
+		return err
+	}
+
+	var nicenum int
+	err := row.Scan(&nicenum)
+	if err != nil {
+		return err
+	}
+
+	const sqlUpdateNice = `
+		update
+			articles
+		set
+			nice = ?
+		where
+			article_id = ?
+	`
+
+	_, err = db.Exec(sqlUpdateNice, nicenum+1, articleID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
