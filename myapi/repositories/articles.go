@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/tanakalucky/golang-test/models"
 )
@@ -20,7 +19,6 @@ func InsertArticle(db *sql.DB, article models.Article) (models.Article, error) {
 
 	result, err := db.Exec(sqlStr, article.Title, article.Contents, article.UserName)
 	if err != nil {
-		fmt.Println(err)
 		return models.Article{}, err
 	}
 
@@ -54,7 +52,6 @@ func SelectArticleList(db *sql.DB, page int) ([]models.Article, error) {
 
 	rows, err := db.Query(sqlStr, articleNumPerPage, offset)
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
