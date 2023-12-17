@@ -4,11 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
 	dbUser     = os.Getenv("DB_USER")
-	dbPassword = os.Getenv("DB_PASSWARD")
+	dbPassword = os.Getenv("DB_PASSWORD")
 	dbDatabase = os.Getenv("DB_NAME")
 	dbConn     = fmt.Sprintf("%s:%s@tcp(db:3306)/%s?parseTime=true", dbUser, dbPassword, dbDatabase)
 )

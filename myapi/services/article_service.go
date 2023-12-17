@@ -57,21 +57,21 @@ func GetArticleListService(page int) ([]models.Article, error) {
 	return articleList, nil
 }
 
-func PostNiceService(articleID int) (models.Article, error) {
+func PostNiceService(article models.Article) (models.Article, error) {
 	db, err := connectDB()
 	if err != nil {
 		return models.Article{}, err
 	}
 	defer db.Close()
 
-	err = repositories.UpdateNiceNum(db, articleID)
+	err = repositories.UpdateNiceNum(db, article.ID)
 	if err != nil {
-		return models.Article{}, nil
+		return models.Article{}, err
 	}
 
-	afterArticle, err := repositories.SelectArticleDetail(db, articleID)
+	afterArticle, err := repositories.SelectArticleDetail(db, article.ID)
 	if err != nil {
-		return models.Article{}, nil
+		return models.Article{}, err
 	}
 
 	return afterArticle, nil

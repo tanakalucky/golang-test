@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/tanakalucky/golang-test/models"
@@ -114,6 +115,7 @@ func UpdateNiceNum(db *sql.DB, articleID int) error {
 			article_id = ?;
 	`
 
+	fmt.Println(articleID)
 	row := db.QueryRow(sqlGetNice, articleID)
 	if err := row.Err(); err != nil {
 		return err
